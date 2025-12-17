@@ -1,17 +1,25 @@
 kotlin {
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":common-util"))
-                implementation(project(":common-encoder"))
-            }
+        commonMain.dependencies {
+            implementation(project(":common-util"))
+            implementation(project(":common-encoder"))
+
+            implementation(libs.kotlinx.coroutine.core)
+
+            implementation(kotlincrypto.hash.md)
+            implementation(kotlincrypto.hash.sha1)
+            implementation(kotlincrypto.hash.sha2)
+            implementation(kotlincrypto.hash.sha3)
+            implementation(kotlincrypto.macs.hmac.md)
+            implementation(kotlincrypto.macs.hmac.sha1)
+            implementation(kotlincrypto.macs.hmac.sha2)
+            implementation(kotlincrypto.macs.hmac.sha3)
         }
-//        val jsMain by getting {
-//            dependencies {
-//                val kryptoVersion: String by project
-//
-//                implementation("com.soywiz.korlibs.krypto:krypto-js:$kryptoVersion")
-//            }
-//        }
+        webMain.dependencies {
+            implementation(libs.cryptography.core)
+        }
+        nativeMain.dependencies {
+            implementation(libs.cryptography.core)
+        }
     }
 }

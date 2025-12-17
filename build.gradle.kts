@@ -1,28 +1,33 @@
+import org.jetbrains.dokka.gradle.tasks.DokkaGeneratePublicationTask
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jreleaser.model.Active
 import org.jreleaser.model.Signing
 
 plugins {
-    kotlin("multiplatform") version "2.1.21"
-    id("org.jetbrains.dokka") version "2.0.0"
-    id("maven-publish")
-    id("org.jreleaser") version "1.18.0"
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.dokka) apply false
+    alias(libs.plugins.dokka.javadoc) apply false
+    alias(libs.plugins.jreleaser)
+
+//    id("maven-publish")
 }
 
-allprojects {
+subprojects {
     apply {
-        plugin("kotlin-multiplatform")
+        plugin("org.jetbrains.kotlin.multiplatform")
         plugin("org.jetbrains.dokka")
+        plugin("org.jetbrains.dokka-javadoc")
         plugin("maven-publish")
     }
 
     group = "kr.jadekim"
-    version = "2.1.2"
+    version = "3.0.0-beta1"
 
     repositories {
         mavenCentral()
     }
 
-    kotlin {
+    configure<KotlinMultiplatformExtension> {
         jvmToolchain(8)
 
         jvm {
@@ -30,49 +35,42 @@ allprojects {
                 useJUnitPlatform()
             }
         }
-//        js(IR) {
-//            browser()
-//            nodejs()
-//        }
+
+        js {
+            browser()
+            nodejs()
+        }
+
+        iosArm64()
+        iosSimulatorArm64()
 
         @Suppress("UNUSED_VARIABLE")
         sourceSets {
-            val commonMain by getting
-            val commonTest by getting {
-                dependencies {
-                    implementation(kotlin("test-common"))
-                    implementation(kotlin("test-annotations-common"))
-                }
+            commonTest.dependencies {
+                implementation(kotlin("test"))
             }
-            val jvmMain by getting
-            val jvmTest by getting {
-                dependencies {
-                    val junitVersion: String by project
+            iosMain.dependencies {
 
-                    implementation(kotlin("test-junit5"))
-
-                    runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-                    compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-                    compileOnly("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-                }
             }
-//            val jsMain by getting
-//            val jsTest by getting {
-//                dependencies {
-//                    implementation(kotlin("test-js"))
-//                }
-//            }
+            jvmTest.dependencies {
+                val junitVersion: String by project
+
+                implementation(kotlin("test-junit5"))
+
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+                compileOnly("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+                compileOnly("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+            }
         }
     }
 
-    val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
     val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
-        dependsOn(dokkaHtml)
+        dependsOn(tasks.named<DokkaGeneratePublicationTask>("dokkaGeneratePublicationHtml"))
         archiveClassifier.set("javadoc")
-        from(dokkaHtml.outputDirectory)
+        from(tasks.named<DokkaGeneratePublicationTask>("dokkaGeneratePublicationHtml").flatMap { it.outputDirectory })
     }
 
-    publishing {
+    configure<PublishingExtension> {
         publications.withType<MavenPublication> {
             artifact(javadocJar)
             pom {
@@ -160,7 +158,9 @@ jreleaser {
     }
 }
 
-tasks.named("publish") {
+tasks.register("publish") {
+    group = "publishing"
+
     subprojects.forEach {
         dependsOn("${it.name}:publish")
     }

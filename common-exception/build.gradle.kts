@@ -5,12 +5,8 @@ kotlin {
             languageSettings.optIn("kotlin.contracts.ExperimentalContracts")
         }
 
-        val jvmMain by getting {
-            dependencies {
-                val kotlinxCoroutineVersion: String by project
-
-                compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutineVersion")
-            }
+        jvmMain.dependencies {
+            compileOnly(libs.kotlinx.coroutine.core)
         }
 //        val jsMain by getting {
 //            dependencies {

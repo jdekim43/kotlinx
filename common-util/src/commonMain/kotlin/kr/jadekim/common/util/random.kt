@@ -1,13 +1,26 @@
 package kr.jadekim.common.util
 
+import kr.jadekim.common.extension.toIntWithinBigEndian
+import org.kotlincrypto.random.CryptoRand
 import kotlin.math.log
 import kotlin.math.log10
 import kotlin.math.pow
 import kotlin.random.Random
 
-expect class SecureRandom(seed: ByteArray? = null) : Random
+//todo: remove external library
+//using js native crypto library
+object SecureRandom : Random() {
 
-private val DEFAULT_RANDOM: Random = SecureRandom()
+    override fun nextBits(bitCount: Int): Int {
+        val randomInt = ByteArray(Int.SIZE_BYTES)
+            .apply(CryptoRand::nextBytes)
+            .toIntWithinBigEndian()
+
+        return randomInt.ushr(32 - bitCount) and (-bitCount).shr(31)
+    }
+}
+
+private val DEFAULT_RANDOM: Random = SecureRandom
 
 private const val RANDOM_STRING_START_ASCII = 97
 private const val RANDOM_STRING_END_ASCII = 122

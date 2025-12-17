@@ -5,19 +5,18 @@ kotlin {
             languageSettings.optIn("kotlin.contracts.ExperimentalContracts")
         }
 
-        val jvmMain by getting {
-            dependencies {
-                val kotlinxCoroutineVersion: String by project
+        commonMain.dependencies {
+            implementation(kotlincrypto.random.crypto.rand)
 
-                compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutineVersion")
-            }
+            compileOnly(libs.kotlinx.coroutine.core)
         }
-//        val jsMain by getting {
-//            dependencies {
-//                val kryptoVersion: String by project
-//
-//                implementation("com.soywiz.korlibs.krypto:krypto-js:$kryptoVersion")
-//            }
-//        }
+
+        jvmMain.dependencies {
+            compileOnly(libs.kotlinx.coroutine.core)
+        }
+
+        webMain.dependencies {
+            implementation(kotlinWrappers.web)
+        }
     }
 }

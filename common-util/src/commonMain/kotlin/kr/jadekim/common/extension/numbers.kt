@@ -22,6 +22,60 @@ fun <T : Comparable<T>> min(a: T, b: T) = if (a < b) a else b
 
 fun <T : Comparable<T>> max(a: T, b: T) = if (a > b) a else b
 
+val Short.bigEndian: ByteArray
+    get() {
+        val value = toInt()
+
+        return byteArrayOf(
+            ((value shr 8) and 0xFF).toByte(),
+            (value and 0xFF).toByte()
+        )
+    }
+
+val Short.littleEndian: ByteArray
+    get() {
+        val value = toInt()
+
+        return byteArrayOf(
+            (value and 0xFF).toByte(),
+            ((value shr 8) and 0xFF).toByte(),
+        )
+    }
+
+fun ByteArray.toShortWithinBigEndian(): Short {
+    var result = 0
+
+    for (i in indices) {
+        result = result or ((this[i].toInt() and 0xFF) shl ((Short.SIZE_BITS - 8) - 8 * i))
+    }
+
+    return result.toShort()
+}
+
+fun ByteArray.toShortWithinLittleEndian(): Short {
+    var result = 0
+
+    for (i in indices) {
+        result = result or ((this[i].toInt() and 0xFF) shl 8 * i)
+    }
+
+    return result.toShort()
+}
+
+val UShort.bigEndian: ByteArray
+    get() = toShort().bigEndian
+
+val UShort.littleEndian: ByteArray
+    get() = toShort().littleEndian
+
+fun ByteArray.toUShortWithinBigEndian(): UShort {
+    return toShortWithinBigEndian().toUShort()
+}
+
+fun ByteArray.toUShortWithinLittleEndian(): UShort {
+    return toShortWithinLittleEndian().toUShort()
+}
+
 val Int.bigEndian: ByteArray
     get() = byteArrayOf(
         ((this shr 24) and 0xFF).toByte(),
@@ -38,17 +92,17 @@ val Int.littleEndian: ByteArray
         ((this shr 24) and 0xFF).toByte()
     )
 
-fun ByteArray.bigEndianToInt(): Int {
+fun ByteArray.toIntWithinBigEndian(): Int {
     var result = 0
 
     for (i in indices) {
-        result = result or ((this[i].toInt() and 0xFF) shl (24 - 8 * i))
+        result = result or ((this[i].toInt() and 0xFF) shl ((Int.SIZE_BITS - 8) - 8 * i))
     }
 
     return result
 }
 
-fun ByteArray.littleEndianToInt(): Int {
+fun ByteArray.toIntWithinLittleEndian(): Int {
     var result = 0
 
     for (i in indices) {
@@ -56,6 +110,20 @@ fun ByteArray.littleEndianToInt(): Int {
     }
 
     return result
+}
+
+val UInt.bigEndian: ByteArray
+    get() = toInt().bigEndian
+
+val UInt.littleEndian: ByteArray
+    get() = toInt().littleEndian
+
+fun ByteArray.toUIntWithinBigEndian(): UInt {
+    return toIntWithinBigEndian().toUInt()
+}
+
+fun ByteArray.toUIntWithinLittleEndian(): UInt {
+    return toIntWithinLittleEndian().toUInt()
 }
 
 val Long.bigEndian: ByteArray
@@ -82,17 +150,17 @@ val Long.littleEndian: ByteArray
         ((this shr 56) and 0xFF).toByte()
     )
 
-fun ByteArray.bigEndianToLong(): Long {
+fun ByteArray.toLongWithinBigEndian(): Long {
     var result = 0L
 
     for (i in indices) {
-        result = result or ((this[i].toInt() and 0xFF) shl (56 - 8 * i)).toLong()
+        result = result or ((this[i].toInt() and 0xFF) shl ((Long.SIZE_BITS - 8) - 8 * i)).toLong()
     }
 
     return result
 }
 
-fun ByteArray.littleEndianToLong(): Long {
+fun ByteArray.toLongWithinLittleEndian(): Long {
     var result = 0L
 
     for (i in indices) {
@@ -100,4 +168,18 @@ fun ByteArray.littleEndianToLong(): Long {
     }
 
     return result
+}
+
+val ULong.bigEndian: ByteArray
+    get() = toLong().bigEndian
+
+val ULong.littleEndian: ByteArray
+    get() = toLong().littleEndian
+
+fun ByteArray.toULongWithinBigEndian(): ULong {
+    return toLongWithinBigEndian().toULong()
+}
+
+fun ByteArray.toULongWithinLittleEndian(): ULong {
+    return toLongWithinLittleEndian().toULong()
 }
