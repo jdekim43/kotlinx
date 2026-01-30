@@ -31,13 +31,13 @@ actual val AES_CBC_PKCS7 = EncryptionAlgorithm(
 actual val RSA_ECB_OAEP_SHA_256 = EncryptionAlgorithm(
     encrypt = { plaintext, key, _ ->
         val rsa = CryptographyProvider.Default.get(RSA.OAEP)
-        val encryptor = rsa.publicKeyDecoder(SHA256).decodeFromByteArrayBlocking(RSA.PublicKey.Format.PEM, key).encryptor()
+        val encryptor = rsa.publicKeyDecoder(SHA256).decodeFromByteArrayBlocking(RSA.PublicKey.Format.DER, key).encryptor()
 
         encryptor.encryptBlocking(plaintext)
     },
     decrypt = { ciphertext, key, _ ->
         val rsa = CryptographyProvider.Default.get(RSA.OAEP)
-        val decryptor = rsa.privateKeyDecoder(SHA256).decodeFromByteArrayBlocking(RSA.PrivateKey.Format.PEM, key).decryptor()
+        val decryptor = rsa.privateKeyDecoder(SHA256).decodeFromByteArrayBlocking(RSA.PrivateKey.Format.DER, key).decryptor()
 
         decryptor.decryptBlocking(ciphertext)
     },

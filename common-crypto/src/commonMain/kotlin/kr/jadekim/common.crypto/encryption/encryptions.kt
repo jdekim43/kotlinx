@@ -16,7 +16,7 @@ val AES_CBC_PKCS7_RANDOM_IV = EncryptionAlgorithm(
         initialVector + ciphertext
     },
     decrypt = { ciphertext, key, iv ->
-        val initialVector = ciphertext.sliceArray(0 until AES_BLOCK_SIZE)
+        val initialVector = iv ?: ciphertext.sliceArray(0 until AES_BLOCK_SIZE)
         val dataBytes = ciphertext.sliceArray(AES_BLOCK_SIZE until ciphertext.size)
         val plaintext = AES_CBC_PKCS7.decrypt(dataBytes, key, initialVector)
 

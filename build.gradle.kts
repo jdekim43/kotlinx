@@ -12,19 +12,21 @@ plugins {
 //    id("maven-publish")
 }
 
+allprojects {
+    group = "kr.jadekim"
+    version = "3.0.0-beta1"
+
+    repositories {
+        mavenCentral()
+    }
+}
+
 subprojects {
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
         plugin("org.jetbrains.dokka")
         plugin("org.jetbrains.dokka-javadoc")
         plugin("maven-publish")
-    }
-
-    group = "kr.jadekim"
-    version = "3.0.0-beta1"
-
-    repositories {
-        mavenCentral()
     }
 
     configure<KotlinMultiplatformExtension> {
@@ -130,6 +132,16 @@ jreleaser {
 
                     subprojects.forEach {
                         stagingRepository(it.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath)
+
+                        listOf("iosarm64", "iossimulatorarm64", "js").forEach { target ->
+                            artifactOverride {
+                                artifactId = "${it.name}-$target"
+                                jar = false
+                                verifyPom = false
+                                sourceJar = false
+                                javadocJar = false
+                            }
+                        }
                     }
                 }
             }
@@ -145,6 +157,16 @@ jreleaser {
 
                     subprojects.forEach {
                         stagingRepository(it.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath)
+
+                        listOf("iosarm64", "iossimulatorarm64", "js").forEach { target ->
+                            artifactOverride {
+                                artifactId = "${it.name}-$target"
+                                jar = false
+                                verifyPom = false
+                                sourceJar = false
+                                javadocJar = false
+                            }
+                        }
                     }
                 }
             }
@@ -158,6 +180,14 @@ jreleaser {
     }
 }
 
+val clearStagingDirectory = tasks.create<Delete>("clearStagingDirectory") {
+    delete(layout.buildDirectory.dir("staging-deploy"))
+
+    subprojects.forEach {
+        delete(it.layout.buildDirectory.dir("staging-deploy"))
+    }
+}
+
 tasks.register("publish") {
     group = "publishing"
 
@@ -165,5 +195,5 @@ tasks.register("publish") {
         dependsOn("${it.name}:publish")
     }
 
-    finalizedBy(":jreleaserFullRelease")
+    finalizedBy(":jreleaserFullRelease", clearStagingDirectory)
 }

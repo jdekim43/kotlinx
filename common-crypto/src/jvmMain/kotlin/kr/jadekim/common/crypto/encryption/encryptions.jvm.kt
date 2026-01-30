@@ -95,20 +95,7 @@ actual val RSA_ECB_OAEP_SHA_256 = EncryptionAlgorithm(
         val oaepParams = OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT)
 
         cipher.init(Cipher.ENCRYPT_MODE, publicKey, oaepParams)
-
-        val input = plaintext.inputStream()
-        val output = ByteArrayOutputStream()
-
-        val inputBuffer = ByteArray(245)
-
-        var len: Int = input.read(inputBuffer)
-        while (len != -1) {
-            output.write(cipher.doFinal(inputBuffer, 0, len))
-
-            len = input.read(inputBuffer)
-        }
-
-        output.toByteArray()
+        cipher.doFinal(plaintext)
     },
     decrypt = { ciphertext, key, _ ->
         val cipher = Cipher.getInstance("RSA")
@@ -121,19 +108,6 @@ actual val RSA_ECB_OAEP_SHA_256 = EncryptionAlgorithm(
         val oaepParams = OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT)
 
         cipher.init(Cipher.DECRYPT_MODE, privateKey, oaepParams)
-
-        val input = ciphertext.inputStream()
-        val output = ByteArrayOutputStream()
-
-        val inputBuffer = ByteArray(256)
-
-        var len: Int = input.read(inputBuffer)
-        while (len != -1) {
-            output.write(cipher.doFinal(inputBuffer, 0, len))
-
-            len = input.read(inputBuffer)
-        }
-
-        output.toByteArray()
+        cipher.doFinal(ciphertext)
     },
 )

@@ -16,7 +16,6 @@ package kr.jadekim.common.encoder
 object Base58 : Encoder<ByteArray, String> {
 
     private const val ENCODED_ZERO = '1'
-    private const val CHECKSUM_SIZE = 4
 
     private const val alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
     private val alphabetIndices by lazy {
@@ -90,32 +89,6 @@ object Base58 : Encoder<ByteArray, String> {
         // Return decoded data (including original number of leading zeros).
         return decoded.copyOfRange(outputStart - zeros, decoded.size)
     }
-
-//    fun encodeWithChecksum(data: ByteArray) = ByteArray(data.size + CHECKSUM_SIZE).apply {
-//        data.copyInto(this)
-//        val checksum = data.hash(SHA_256).hash(SHA_256)
-//        checksum.copyInto(this, data.size)
-//
-//    }.let(this::encode)
-//
-//    fun decodeWithChecksum(data: String): ByteArray {
-//        val rawBytes = decode(data)
-//        if (rawBytes.size < CHECKSUM_SIZE) {
-//            throw Exception("Too short for checksum: $this l:  ${rawBytes.size}")
-//        }
-//        val checksum = rawBytes.copyOfRange(rawBytes.size - CHECKSUM_SIZE, rawBytes.size)
-//
-//        val payload = rawBytes.copyOfRange(0, rawBytes.size - CHECKSUM_SIZE)
-//
-//        val hash = payload.hash(SHA_256).hash(SHA_256)
-//        val computedChecksum = hash.copyOfRange(0, CHECKSUM_SIZE)
-//
-//        if (checksum.contentEquals(computedChecksum)) {
-//            return payload
-//        } else {
-//            throw IllegalArgumentException("Checksum mismatch: $checksum is not computed checksum $computedChecksum")
-//        }
-//    }
 
     private fun divmod(number: ByteArray, firstDigit: UInt, base: UInt, divisor: UInt): UInt {
         // this is just long division which accounts for the base of the input digits

@@ -11,7 +11,7 @@ class Base64Test {
     fun succeed() {
         val original = "testText1$"
 
-        val encoded = Base64.encode(original)
+        val encoded = Base64.encode(original.utf8())
         assertEquals("dGVzdFRleHQxJA==", encoded)
 
         val decoded = Base64.decode(encoded).utf8()
