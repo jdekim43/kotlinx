@@ -1,10 +1,17 @@
+plugins {
+    id("convention.kotlin-multiplatform")
+    id("convention.publish")
+}
+
 kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":common-util"))
             implementation(project(":common-encoder"))
 
-            implementation(libs.kotlinx.coroutine.core)
+            implementation(kt.kotlinx.coroutine)
+
+            implementation(libs.ionspin.bignum)
 
             implementation(kotlincrypto.hash.md)
             implementation(kotlincrypto.hash.sha1)

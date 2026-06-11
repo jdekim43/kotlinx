@@ -17,7 +17,7 @@ fun <EncodedType> HashFunction.hash(data: String, encoder: Encoder<ByteArray, En
 
 class HashException(cause: Throwable?) : RuntimeException(cause?.message, cause)
 
-internal inline fun HashFunction(crossinline body: (ByteArray) -> ByteArray) = object : HashFunction {
+inline fun HashFunction(crossinline body: (ByteArray) -> ByteArray) = object : HashFunction {
 
     override fun hash(data: ByteArray): ByteArray = try {
         body(data)

@@ -1,14 +1,8 @@
 [versions]
-kotlin = "2.2.21"
-kotlinx-coroutine = "1.10.2"
-dokka = "2.1.0"
 
 [plugins]
-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-dokka-javadoc = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
 jreleaser = { id = "org.jreleaser", version = "1.20.0" }
 
 [libraries]
-kotlinx-coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutine" }
 cryptography-core = { group = "dev.whyoleg.cryptography", name = "cryptography-core", version = "0.5.0" }
+ionspin-bignum = { group = "com.ionspin.kotlin", name = "bignum", version = "0.3.10" }

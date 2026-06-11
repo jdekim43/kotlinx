@@ -1,3 +1,8 @@
+plugins {
+    id("convention.kotlin-multiplatform")
+    id("convention.publish")
+}
+
 kotlin {
     sourceSets {
         all {
@@ -8,11 +13,7 @@ kotlin {
         commonMain.dependencies {
             implementation(kotlincrypto.random.crypto.rand)
 
-            compileOnly(libs.kotlinx.coroutine.core)
-        }
-
-        jvmMain.dependencies {
-            compileOnly(libs.kotlinx.coroutine.core)
+            compileOnly(kt.kotlinx.coroutine)
         }
 
         webMain.dependencies {

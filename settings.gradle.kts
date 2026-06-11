@@ -10,6 +10,7 @@ include(
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
+        mavenLocal()
     }
 
     versionCatalogs {
@@ -19,6 +20,10 @@ dependencyResolutionManagement {
 
         create("kotlincrypto") {
             from("org.kotlincrypto:version-catalog:0.8.0")
+        }
+
+        create("kt") {
+            from(files("gradle/kotlin.versions.toml"))
         }
     }
 }

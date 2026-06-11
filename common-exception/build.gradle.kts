@@ -1,3 +1,8 @@
+plugins {
+    id("convention.kotlin-multiplatform")
+    id("convention.publish")
+}
+
 kotlin {
     sourceSets {
         all {
@@ -6,7 +11,7 @@ kotlin {
         }
 
         jvmMain.dependencies {
-            compileOnly(libs.kotlinx.coroutine.core)
+            compileOnly(kt.kotlinx.coroutine)
         }
 //        val jsMain by getting {
 //            dependencies {
