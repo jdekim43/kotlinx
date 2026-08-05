@@ -13,7 +13,7 @@ object BCS : Encoder<ByteArray, ByteArray> {
 
     fun byteVector() = ByteVector
 
-    fun enum(types: KMap<KString, BCSType<Any>>) = Enum
+    fun enum(types: KMap<KString, BCSType<Any>>) = Enum(types)
 
     fun <T> fixedArray(size: Int, type: BCSType<T>) = FixedArray(size, type)
 

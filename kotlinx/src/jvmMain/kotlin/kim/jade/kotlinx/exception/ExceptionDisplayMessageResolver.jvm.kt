@@ -35,7 +35,7 @@ open class ResourceExceptionDisplayMessageResolver : StaticExceptionDisplayMessa
             ?.forEach { file ->
                 val locale = try {
                     Locale.from(file.name)
-                } catch (e: Exception) {
+                } catch (e: IllegalArgumentException) {
                     return@forEach
                 }
                 val messages = file.inputStream().use { Properties().apply { load(InputStreamReader(it)) } }

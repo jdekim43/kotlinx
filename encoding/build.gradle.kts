@@ -7,7 +7,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":kotlinx"))
-            implementation(libs.bignum)
+            api(libs.bignum)
         }
     }
 }

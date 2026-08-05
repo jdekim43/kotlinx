@@ -20,7 +20,7 @@ fun ByteArray.padStart(size: Int, byte: Byte = 0): ByteArray {
 fun ByteArray.padEnd(size: Int, byte: Byte = 0): ByteArray {
     val result = ByteArray(size)
 
-    for (i in (size - this.size) until size) {
+    for (i in this.size until size) {
         result[i] = byte
     }
 
@@ -74,7 +74,7 @@ fun Byte.toBinary(): BooleanArray = toInt().let { byte ->
 }
 
 fun Int.toBinary(): BooleanArray = BooleanArray(Int.SIZE_BITS) { i ->
-    val isOne = ((this@toBinary shr (Byte.SIZE_BITS - 1 - i)) and 1) == 1
+    val isOne = ((this@toBinary shr (Int.SIZE_BITS - 1 - i)) and 1) == 1
 
     return@BooleanArray isOne
 }

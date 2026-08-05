@@ -139,7 +139,9 @@ fun ByteArray.toLong(byteOrder: ByteOrder = ByteOrder.BIG_ENDIAN): Long = when (
         var result = 0L
 
         for (i in indices) {
-            result = result or ((this[i].toInt() and 0xFF) shl ((Long.SIZE_BITS - 8) - 8 * i)).toLong()
+            val value = this[i].toLong() and 0xFFL
+            val shift = (size - 1 - i) * Byte.SIZE_BITS
+            result = result or (value shl shift)
         }
 
         result
@@ -149,7 +151,9 @@ fun ByteArray.toLong(byteOrder: ByteOrder = ByteOrder.BIG_ENDIAN): Long = when (
         var result = 0L
 
         for (i in indices) {
-            result = result or ((this[i].toInt() and 0xFF) shl 8 * i).toLong()
+            val value = this[i].toLong() and 0xFFL
+            val shift = i * Byte.SIZE_BITS
+            result = result or (value shl shift)
         }
 
         result

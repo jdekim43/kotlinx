@@ -41,31 +41,6 @@ fun <T, K> List<T>.sequentialGroupBy(keySelector: (T) -> K): List<Pair<K, List<T
     return result.toList()
 }
 
-fun <T : Comparable<T>> ClosedRange<T>.iterable(next: (T) -> T?): Iterable<T> = object: Iterable<T> {
-
-    override fun iterator(): Iterator<T> = object : Iterator<T> {
-        private var isFirst = true
-        private var nextValue: T? = start
-
-        override fun hasNext(): Boolean {
-            if (isFirst) {
-                isFirst = false
-                return true
-            }
-
-            if (nextValue == null) {
-                return false
-            }
-
-            nextValue = next(nextValue!!)
-
-            return nextValue != null && nextValue!! in this@iterable
-        }
-
-        override fun next(): T = nextValue!!
-    }
-}
-
 fun <K, V> Iterable<K>.withValue(
     values: Iterable<V>,
     keySelector: (V) -> K,
@@ -87,7 +62,7 @@ fun <K, V> Iterable<K>.withValue(
             }
 
             val key = keyIterator.next()
-            val value = valueTemp ?: if(valueIterator.hasNext()) valueIterator.next() else defaultValue(key)
+            val value = valueTemp ?: if (valueIterator.hasNext()) valueIterator.next() else defaultValue(key)
 
             return if (key == keySelector(value)) {
                 valueTemp = null
