@@ -92,6 +92,13 @@ jreleaser {
             }
         }
     }
+
+    release {
+        github {
+            repoOwner = "jdekim43"
+            skipTag = true
+        }
+    }
 }
 
 val clearStagingDirectory = tasks.create<Delete>("clearStagingDirectory") {
