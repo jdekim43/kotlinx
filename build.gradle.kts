@@ -6,9 +6,25 @@ plugins {
     alias(libs.plugins.jreleaser)
 }
 
+val releaseVersion = providers.gradleProperty("releaseVersion").getOrElse("3.0.0-SNAPSHOT")
+val nonJvmArtifactIds = listOf(
+    "js",
+    "macosarm64",
+    "iosarm64",
+    "iosx64",
+    "iossimulatorarm64",
+    "watchosarm64",
+    "watchossimulatorarm64",
+    "tvosarm64",
+    "tvossimulatorarm64",
+    "linuxx64",
+    "linuxarm64",
+    "mingwx64",
+)
+
 allprojects {
-    group = "kr.jadekim"
-    version = "3.0.0-beta5"
+    group = "kim.jade"
+    version = releaseVersion
 }
 
 jreleaser {
@@ -16,9 +32,9 @@ jreleaser {
         author("Jade Kim")
         license.set("Apache-2.0")
         links {
-            vcsBrowser.set("https://github.com/jdekim43/kotlin-common")
+            vcsBrowser.set("https://github.com/jdekim43/kotlinx")
         }
-        inceptionYear.set("2021")
+        inceptionYear.set("2026")
     }
 
     signing {
@@ -37,7 +53,7 @@ jreleaser {
                     subprojects.forEach {
                         stagingRepository(it.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath)
 
-                        listOf("iosarm64", "iossimulatorarm64", "js").forEach { target ->
+                        nonJvmArtifactIds.forEach { target ->
                             artifactOverride {
                                 artifactId = "${it.name}-$target"
                                 jar = false
@@ -62,7 +78,7 @@ jreleaser {
                     subprojects.forEach {
                         stagingRepository(it.layout.buildDirectory.dir("staging-deploy").get().asFile.absolutePath)
 
-                        listOf("iosarm64", "iossimulatorarm64", "js").forEach { target ->
+                        nonJvmArtifactIds.forEach { target ->
                             artifactOverride {
                                 artifactId = "${it.name}-$target"
                                 jar = false
@@ -74,12 +90,6 @@ jreleaser {
                     }
                 }
             }
-        }
-    }
-
-    release {
-        github {
-            repoOwner = "jdekim43"
         }
     }
 }
@@ -100,6 +110,4 @@ tasks.register("publish") {
         publishTask.configure { dependsOn(clearStagingDirectory) }
         dependsOn(publishTask)
     }
-
-    finalizedBy(":jreleaserFullRelease")
 }

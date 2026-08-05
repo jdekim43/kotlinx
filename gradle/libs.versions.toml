@@ -1,8 +1,28 @@
 [versions]
+bignum = "0.3.10"
+cryptography = "0.6.0"
+stately = "2.1.0"
+gson = "2.14.0"
+jackson = "3.2.1"
+koin = "4.2.2"
+slf4j = "2.0.18"
+sentry = "8.48.0"
+okhttp = "5.4.0"
 
 [plugins]
-jreleaser = { id = "org.jreleaser", version = "1.20.0" }
+jreleaser = { id = "org.jreleaser", version = "1.25.0" }
 
 [libraries]
-cryptography-core = { group = "dev.whyoleg.cryptography", name = "cryptography-core", version = "0.5.0" }
-ionspin-bignum = { group = "com.ionspin.kotlin", name = "bignum", version = "0.3.10" }
+bignum = { group = "com.ionspin.kotlin", name = "bignum", version.ref = "bignum" }
+cryptography-core = { group = "dev.whyoleg.cryptography", name = "cryptography-core", version.ref = "cryptography" }
+cryptography-provider-base = { group = "dev.whyoleg.cryptography", name = "cryptography-provider-base", version.ref = "cryptography" }
+cryptography-provider-optimal = { group = "dev.whyoleg.cryptography", name = "cryptography-provider-optimal", version.ref = "cryptography" }
+stately-collections = { module = "co.touchlab:stately-collections", version.ref = "stately" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+jackson-databind = { module = "tools.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+sentry = { module = "io.sentry:sentry", version.ref = "sentry" }
+sentry-kotlin = { module = "io.sentry:sentry-kotlin-extensions", version.ref = "sentry" }
+okhttp-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }

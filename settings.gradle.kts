@@ -1,16 +1,30 @@
-rootProject.name = "kotlin-common"
+import kim.jade.gradle.plugin.cleanarch.plugin.module
 
-include(
-    "common-util",
-    "common-exception",
-    "common-encoder",
-    "common-crypto"
-)
+rootProject.name = "kotlinx"
+
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("kim.jade.gradle.plugin.cleanarch") version "0.1.18"
+}
+
+include(":kotlinx")
+module("encoding")
+module("security")
 
 dependencyResolutionManagement {
     repositories {
-        mavenCentral()
         mavenLocal()
+        mavenCentral()
+        google()
+        gradlePluginPortal()
     }
 
     versionCatalogs {
@@ -18,12 +32,12 @@ dependencyResolutionManagement {
             from("org.jetbrains.kotlin-wrappers:kotlin-wrappers-catalog:2025.11.12")
         }
 
-        create("kotlincrypto") {
-            from("org.kotlincrypto:version-catalog:0.8.0")
-        }
-
         create("kt") {
             from(files("gradle/kotlin.versions.toml"))
+        }
+
+        create("kotlincrypto") {
+            from("org.kotlincrypto:version-catalog:0.8.0")
         }
     }
 }
